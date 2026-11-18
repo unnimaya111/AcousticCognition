@@ -1,0 +1,454 @@
+--- Style block 0 ---
+<style>{custom_css}</style>
+--- Style block 1 ---
+<style>
+    /* ── Reset Streamlit container padding for landing page ── */
+    .stApp:has(.lp-hook) > div > div > div > div.block-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+    /* Hide sidebar ONLY on landing page, never on dashboard */
+    .stApp:has(.lp-hook):not(:has(.dashboard-hook)) section[data-testid="stSidebar"] { 
+        display: none !important; 
+    }
+
+    /* ── Page wrapper ── */
+    .lp-wrap {
+        font-family: 'Inter', 'Outfit', sans-serif;
+        background: #fff;
+        color: #071A3D;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .lp-hero {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        align-items: center;
+        gap: 48px;
+        padding: 32px 60px 32px;
+        background:
+            radial-gradient(circle at 80% 40%, rgba(37,99,235,0.16) 0%, transparent 50%),
+            linear-gradient(125deg, #ffffff 0%, #EFF6FF 50%, #DBEAFE 100%);
+        box-sizing: border-box;
+        min-height: 430px;
+        max-height: 460px;
+    }
+
+    .hero-left {
+        width: 100% !important;
+    }
+
+    /* badge: fully hidden */
+    .lp-badge { display: none !important; }
+
+    .hero-heading-single-line {
+        font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+        font-size: 34px !important;
+        font-weight: 900 !important;
+        line-height: 1.15 !important;
+        letter-spacing: -0.6px !important;
+        color: #0B2A5B !important;
+        white-space: normal !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 0 28px 0 !important;
+        padding: 0 !important;
+    }
+
+    /* p subtitle */
+    .lp-hero .hero-subtitle {
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        line-height: 1.6 !important;
+        color: #465B7C !important;
+        max-width: 520px !important;
+        margin: 0 0 26px 0 !important;
+    }
+
+    /* ── Hero button row ── */
+    .lp-btn-spacer { margin-top: 0; }
+
+    /* Style both Streamlit hero buttons */
+    [data-testid="stButton"][id*="hero_auth_btn"] > button,
+    div[data-testid="column"]:has(button[kind="primary"]) > div > button {
+        height: 54px !important;
+        border-radius: 10px !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+    }
+    div[data-testid="column"]:has(button[kind="secondary"]) > div > button {
+        height: 54px !important;
+        border-radius: 10px !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        background: #ffffff !important;
+        color: #2563EB !important;
+        border: 2px solid #2563EB !important;
+    }
+
+    /* ── Hero image ── */
+    .lp-hero-image-col {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .lp-hero-image-col img {
+        width: 100%;
+        max-width: 420px;
+        max-height: 420px;
+        object-fit: contain;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+        display: block;
+        filter: none;
+    }
+
+    /* ── FEATURES ── */
+    .lp-features {
+        padding: 36px 72px 44px;
+        background: #fff;
+        box-sizing: border-box;
+    }
+    .lp-section-header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+    .lp-section-header h2 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        color: #071A3D;
+        margin: 0 0 8px;
+    }
+    .lp-section-line {
+        width: 60px;
+        height: 3.5px;
+        background: linear-gradient(90deg, #1D4ED8, #60A5FA);
+        border-radius: 999px;
+        margin: 0 auto;
+    }
+    .lp-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        max-width: 1160px;
+        margin: 0 auto;
+    }
+    .lp-card {
+        background: #fff;
+        border: 1.5px solid #DBEAFE;
+        border-radius: 18px;
+        padding: 26px 24px;
+        box-shadow: 0 8px 28px rgba(37,99,235,0.09);
+        transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .lp-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 44px rgba(37,99,235,0.16);
+    }
+    .lp-card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: #EFF6FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+    .lp-card h3 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #071A3D;
+        margin: 0 0 8px;
+    }
+    .lp-card p {
+        font-size: 14.5px;
+        line-height: 1.6;
+        color: #475569;
+        margin: 0;
+    }
+
+    /* ── RESPONSIVE DESIGN ── */
+    @media (max-width: 1024px) {
+        .hero-title { font-size: 36px !important; line-height: 1.2 !important; }
+        .lp-hero { padding: 28px 40px 36px; }
+        .lp-features { padding: 28px 40px 36px; }
+    }
+    @media (max-width: 860px) {
+        .lp-hero { grid-template-columns: 1fr; padding: 28px 24px 36px; }
+        .lp-hero-image-col { order: -1; }
+        .lp-features { padding: 28px 20px 36px; }
+        .lp-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ── LEARN MORE SECTION ── */
+    .learn-more-section {
+        margin: 60px auto 40px auto !important;
+        max-width: 1100px !important;
+        padding: 45px !important;
+        background: #ffffff !important;
+        border: 1px solid #C9D6EA !important;
+        border-radius: 28px !important;
+        box-shadow: 0 20px 50px rgba(22, 74, 159, 0.10) !important;
+    }
+
+    .learn-header {
+        text-align: center !important;
+        margin-bottom: 36px !important;
+    }
+
+
+
+    .learn-header p {
+        font-size: 19px !important;
+        color: #4B6388 !important;
+        line-height: 1.6 !important;
+        margin: 0 auto !important;
+        max-width: 760px !important;
+    }
+
+    .learn-steps {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+        gap: 22px !important;
+    }
+
+    .learn-step {
+        display: flex !important;
+        gap: 18px !important;
+        align-items: flex-start !important;
+        padding: 24px !important;
+        background: #F7FAFF !important;
+        border: 1px solid #D8E4F5 !important;
+        border-radius: 22px !important;
+        box-shadow: 0 10px 24px rgba(22, 74, 159, 0.06) !important;
+    }
+
+    .learn-step-number {
+        min-width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: #164A9F !important;
+        color: white !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 18px !important;
+        font-weight: 800 !important;
+    }
+
+    .learn-step-content h3 {
+        font-size: 21px !important;
+        font-weight: 800 !important;
+        color: #0B2A5B !important;
+        margin: 0 0 8px 0 !important;
+    }
+
+    .learn-step-content p {
+        font-size: 16px !important;
+        color: #4B6388 !important;
+        line-height: 1.55 !important;
+        margin: 0 !important;
+    }
+
+    .learn-note {
+        margin-top: 28px !important;
+        padding: 20px 24px !important;
+        background: #EEF5FF !important;
+        border-left: 5px solid #164A9F !important;
+        border-radius: 18px !important;
+        color: #3F5578 !important;
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+    }
+    </style>
+--- Style block 2 ---
+<style>
+/* Remove Streamlit default top padding */
+.stApp:has(.simple-auth-page) [data-testid="stAppViewContainer"],
+.stApp:has(.simple-auth-page) div[data-testid="stHeader"] {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+/* FORCE COMPACT LOGIN FORM */
+.stApp:has(.simple-auth-page) div.block-container {
+    max-width: 680px !important;
+    width: 100% !important;
+    margin: 40px auto !important;
+    padding: 24px 40px 24px 40px !important;
+    background: #FFFFFF !important;
+    border-radius: 22px !important;
+    border: 1px solid #E2E8F0 !important;
+    box-shadow: 0 16px 40px rgba(11, 42, 91, 0.06) !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stForm"] {
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stTextInput"] {
+    width: 92% !important;
+    margin: 0 auto 20px auto !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stTextInput"] input {
+    height: 54px !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    border: 1px solid #E2E8F0 !important;
+    padding: 12px 16px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stTextInput"] input:focus {
+    border-color: #145CFF !important;
+    box-shadow: 0 0 0 3px rgba(20, 92, 255, 0.15) !important;
+    outline: none !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stFormSubmitButton"] {
+    width: 92% !important;
+    margin: 24px auto 0 auto !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stFormSubmitButton"] button {
+    height: 56px !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    font-weight: 700 !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stFormSubmitButton"] button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+    filter: brightness(0.95) !important;
+}
+.stApp:has(.simple-auth-page) div[data-testid="stButton"] {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+.stApp:has(.simple-auth-page) button[kind="secondary"] {
+    height: 56px !important;
+    border-radius: 12px !important;
+    width: 92% !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    color: #0F172A !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+.stApp:has(.simple-auth-page) button[kind="secondary"]:hover {
+    background: #F1F5F9 !important;
+    border-color: #CBD5E1 !important;
+}
+.stApp:has(.simple-auth-page) .forgot-link {
+    display: block;
+    width: 92%;
+    margin: -4px auto 20px auto;
+    text-align: right;
+    font-size: 0.85rem;
+    color: #145CFF;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.stApp:has(.simple-auth-page) .forgot-link:hover {
+    color: #0E48CC;
+    text-decoration: underline;
+}
+.stApp:has(.simple-auth-page) .auth-toggle-footer {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 24px 0 12px 0;
+}
+.login-brand {
+    font-size: 34px !important;
+    font-weight: 800 !important;
+    color: #274472 !important;
+    text-align: center !important;
+    margin-bottom: 28px !important;
+}
+.login-title {
+    font-size: 56px !important;
+    font-weight: 900 !important;
+    color: #0B3B79 !important;
+    text-align: center !important;
+    line-height: 1.1 !important;
+    margin-top: 30px !important;
+    margin-bottom: 18px !important;
+}
+</style>
+--- Style block 3 ---
+<style>
+    .stApp:has(.settings-page) [data-testid="stVerticalBlockBorderWrapper"] {
+        background: #FFFFFF !important;
+        border: 1px solid #D7E6FF !important;
+        border-radius: 16px !important;
+        box-shadow: 0 6px 18px rgba(37,99,235,0.04) !important;
+        padding: 24px !important;
+    }
+    .settings-header {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #071A3D;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #F1F5F9;
+        padding-bottom: 8px;
+    }
+    </style>
+--- Style block 4 ---
+<style>
+    .search-card {
+        background: var(--card-bg) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 20px !important;
+        padding: 20px !important;
+        box-shadow: var(--shadow-soft) !important;
+        margin-bottom: 2rem !important;
+    }
+    .history-row {
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 12px rgba(7, 27, 77, 0.03);
+    }
+    </style>
+--- Style block 5 ---
+<style>
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        border-radius: 20px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+        background: white !important;
+        border: 1px solid #E5E7EB !important;
+    }
+    </style>
+--- Style block 6 ---
+<style>
+    [data-testid="stSidebar"] {
+        min-width: 380px !important;
+        max-width: 380px !important;
+    }
+    .stApp:has(.dashboard-hook) > div > div > div > div.block-container,
+    .stApp:has(.dashboard-hook) div.block-container {
+        margin-left: 380px !important;
+        margin-right: auto !important;
+        max-width: calc(100vw - 400px) !important;
+    }
+    </style>

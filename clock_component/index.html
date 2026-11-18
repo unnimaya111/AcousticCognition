@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    body { margin:0; padding:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+            background:transparent; font-family:'Plus Jakarta Sans',sans-serif; user-select:none; }
+    svg { cursor:grab; } svg:active { cursor:grabbing; }
+    .banner { margin-top:15px; padding:8px 20px; border-radius:99px; font-size:0.85rem; font-weight:700;
+                text-transform:uppercase; letter-spacing:0.5px; display:inline-block;
+                background:#F5F8FF; color:#145CFF; border:1px solid #E5ECF6; }
+    </style>
+</head>
+<body>
+    <svg width="260" height="260" viewBox="0 0 100 100" id="clockSvg">
+        <circle cx="50" cy="50" r="46" stroke="#E5ECF6" stroke-width="2.5" fill="#FFFFFF" />
+        <circle cx="50" cy="50" r="44" stroke="#F5F8FF" stroke-width="1.5" fill="none" />
+        <!-- Numbers will be injected by JS or we can hardcode. Streamlit was injecting them, but here we can just do JS injection -->
+        <g id="numbersGroup"></g>
+        <line id="hourHand" x1="50" y1="50" x2="50" y2="30" stroke="#071B4D" stroke-width="4.5" stroke-linecap="round" />
+        <line id="minuteHand" x1="50" y1="50" x2="50" y2="18" stroke="#145CFF" stroke-width="3" stroke-linecap="round" />
+        <circle cx="50" cy="50" r="3" fill="#145CFF" stroke="#FFFFFF" stroke-width="1" />
+    </svg>
+    <script>
+    function sendMessageToStreamlitClient(type, data) {
+        var outData = Object.assign({
+            isStreamlitMessage: true,
+            type: type,
+        }, data);
+        window.parent.postMessage(outData, "*");
+    }
+
+    function init() {
+        sendMessageToStreamlitClient("streamlit:componentReady", {apiVersion: 1});
+    }
+
+    function setFrameHeight(height) {
+        sendMessageToStreamlitClient("streamlit:setFrameHeight", {height: height});
+    }
+
+    function sendDataToPython(data) {
+        sendMessageToStreamlitClient("streamlit:setComponentValue", data);
+    }
+
+    (function() {
+        // Inject numbers
+        var numsGroup = document.getElementById('numbersGroup');
+        for (var i = 1; i <= 12; i++) {
+            var angleRad = ((i * 30) - 90) * (Math.PI / 180);
+            var x = 50 + 36 * Math.cos(angleRad);
+            var y = 50 + 36 * Math.sin(angleRad) + 1.5;
+            var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", x);
+            text.setAttribute("y", y);
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("font-size", "6");
+            text.setAttribute("font-weight", "700");
+            text.setAttribute("fill", "#071B4D");
+            text.textContent = i;
+            numsGroup.appendChild(text);
+        }
+
+        var hrAngle = 0, minAngle = 0, dragging = null;
+        var svg = document.getElementById('clockSvg');
+        var hourHand = document.getElementById('hourHand');
+        var minuteHand = document.getElementById('minuteHand');
+
+        function getAngle(e) {
+            var rect = svg.getBoundingClientRect();
+            var cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+            var clientX = e.clientX||(e.touches&&e.touches[0].clientX);
+            var clientY = e.clientY||(e.touches&&e.touches[0].clientY);
+            var angle = Math.atan2(clientY-cy, clientX-cx)*(180/Math.PI)+90;
+            if(angle<0) angle+=360;
+            return angle;
+        }
+
+        function updateHands() {
+            hourHand.setAttribute('transform','rotate('+hrAngle+' 50 50)');
+            minuteHand.setAttribute('transform','rotate('+minAngle+' 50 50)');
+        }
+
+        function distFromCenter(e) {
+            var rect = svg.getBoundingClientRect();
+            var cx = rect.left+rect.width/2, cy = rect.top+rect.height/2;
+            var clientX = e.clientX||(e.touches&&e.touches[0].clientX);
+            var clientY = e.clientY||(e.touches&&e.touches[0].clientY);
+            return Math.sqrt(Math.pow(clientX-cx,2)+Math.pow(clientY-cy,2));
+        }
+
+        svg.addEventListener('mousedown', onStart);
+        svg.addEventListener('touchstart', onStart, {passive:false});
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('touchmove', onMove, {passive:false});
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchend', onEnd);
+
+        function onStart(e) {
+            e.preventDefault();
+            var dist = distFromCenter(e);
+            var scale = svg.getBoundingClientRect().width/100;
+            dragging = (dist < 18*scale) ? 'hour' : 'minute';
+        }
+
+        function onMove(e) {
+            if(!dragging) return;
+            e.preventDefault();
+            var angle = getAngle(e);
+            if(dragging==='minute') { minAngle=angle; }
+            else { hrAngle=angle; }
+            updateHands();
+        }
+
+        function onEnd() { 
+            if(dragging) {
+                dragging=null;
+                var m = Math.round(minAngle/6)%60;
+                var h = Math.round(hrAngle/30)%12;
+                if(h===0) h=12; if(m<0) m+=60;
+                sendDataToPython({value: {hour: h, minute: m}});
+            }
+        }
+        updateHands();
+    })();
+
+    window.addEventListener("load", function() {
+        init();
+        setFrameHeight(340);
+        sendDataToPython({value: {hour: 12, minute: 0}});
+    });
+    </script>
+</body>
+</html>
